@@ -1,0 +1,21 @@
+name: GoodModeration
+version: '${version}'
+main: org.opencommunity.goodmoderation.Main
+api-version: "1.20"
+authors: [ Envel ]
+
+libraries:
+  - net.dv8tion:JDA:5.0.0-beta.4
+  - club.minnced:discord-webhooks:0.8.2
+
+commands:
+  ban:
+    description: Ban a player from the server.
+    usage: /ban <player> [reason]
+  unban:
+    description: Unban a player from the server.
+    usage: /unban <player>
+  banlist:
+    description: View the server's ban list
+    usage: /banlist <page>
+    permission: myplugin.banlist

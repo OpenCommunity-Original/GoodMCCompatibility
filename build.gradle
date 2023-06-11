@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "8.1.1"
+}
+
+group = 'org.opencommunity'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'papermc-repo'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+}
+
+dependencies {
+    compileOnly("io.papermc.paper:paper-api:1.20-R0.1-SNAPSHOT")
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
+
+shadowJar {
+    archiveFileName = 'GoodMCCompatibility-' + project.version.toString() + '.jar';
+}
+
+artifacts {
+    shadowJar;
+}
