@@ -1,1 +1,1 @@
-# Chatty
+# GoodMCCompatibility
