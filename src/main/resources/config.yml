@@ -1,23 +1,5 @@
-# Enable or disable reporting to Discord
-enable-discord-report: false
-
-# The webhook URL to use for reporting to Discord
-discord-webhook-url: "https://discord.com/api/webhooks/WEBHOOK_ID/TOKEN"
-
-# Enable or disable automatic rollback on ban
-enable-rollback: true
-
-# The command to use for automatic rollback on ban
-# Use %player% to substitute the player's name
-rollback-command: "/pr rb p:%player% t:30d r:global"
-
-# Short reason codes mapped to their corresponding messages
-reasons:
-  1: Griefing
-  2: Exploiting cheats/bugs/exploits
-  3: Inappropriate behavior
-
-# The ban message to use when a player is banned
-# Use %reason% to substitute the ban reason, %moderator% to substitute the moderator's name,
-# and %formattedDate% to substitute the ban date in a formatted string
-ban-message: '{"text":"You have been banned from the server.\n","bold":true,"color":"red","extra":[{"text":"Nickname: ","color":"red"},{"text":"%name%","color":"red"},{"text":"\nReason: ","color":"red"},{"text":"%reason%","color":"red"},{"text":"\nModerator: ","color":"red"},{"text":"%moderator%","color":"red"},{"text":"\nBan date: ","color":"red"},{"text":"%formattedDate%","color":"red"}]}'
+host: "localhost"
+port: 3306
+database: "mydatabase"
+username: "myuser"
+password: "mypassword"

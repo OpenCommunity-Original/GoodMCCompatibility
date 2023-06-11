@@ -1,8 +1,7 @@
-package org.opencommunity.goodmoderation.utils;
+package org.opencommunity.goodmccompatibility.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import org.bukkit.configuration.Configuration;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,24 +19,12 @@ public class SQLAPI {
     private final String password;
     private Connection connection;
 
-    public SQLAPI(String configFile) {
-        Properties properties = loadConfig(configFile);
-
-        this.host = properties.getProperty("host");
-        this.port = Integer.parseInt(properties.getProperty("port"));
-        this.database = properties.getProperty("database");
-        this.username = properties.getProperty("username");
-        this.password = properties.getProperty("password");
-    }
-
-    private Properties loadConfig(String configFile) {
-        Properties properties = new Properties();
-        try (FileInputStream inputStream = new FileInputStream(configFile)) {
-            properties.load(inputStream);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load config file: " + configFile, e);
-        }
-        return properties;
+    public SQLAPI(Configuration config) {
+        this.host = config.getString("host");
+        this.port = config.getInt("port");
+        this.database = config.getString("database");
+        this.username = config.getString("username");
+        this.password = config.getString("password");
     }
 
     public CompletableFuture<Void> connect() {
@@ -48,11 +35,29 @@ public class SQLAPI {
                 connectionProps.setProperty("user", username);
                 connectionProps.setProperty("password", password);
                 connection = DriverManager.getConnection(url, connectionProps);
+
+                // Create the table if it doesn't exist
+                createTableIfNotExists();
             } catch (Exception e) {
                 System.err.println("Failed to connect to the database:");
                 e.printStackTrace();
             }
         });
+    }
+
+    private void createTableIfNotExists() {
+        try (Statement statement = connection.createStatement()) {
+            String sql = "CREATE TABLE IF NOT EXISTS player_times ("
+                    + "id INT PRIMARY KEY AUTO_INCREMENT,"
+                    + "player_uuid VARCHAR(36) NOT NULL,"
+                    + "player_name VARCHAR(16) NOT NULL,"
+                    + "total_play_time BIGINT NOT NULL"
+                    + ")";
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            System.err.println("Failed to create table player_times:");
+            e.printStackTrace();
+        }
     }
 
     public CompletableFuture<Void> close() {
